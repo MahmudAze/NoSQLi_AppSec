@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "3XxBu8WaFsg=",
+  "success": true,
+  "projectFilePath": "D:\\NoSQLinjection_Project\\NoSQLinjection\\NoSQLinjection.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Cyber\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.5\\microsoft.aspnetcore.openapi.10.0.5.nupkg.sha512",
+    "C:\\Users\\Cyber\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
