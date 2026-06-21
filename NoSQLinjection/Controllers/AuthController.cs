@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Text.Json;
+using NoSQLinjection.Models;
 
 namespace NoSQLinjection.Controllers
 {
@@ -9,40 +8,45 @@ namespace NoSQLinjection.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IMongoCollection<BsonDocument> _usersCollection;
+        private readonly IMongoCollection<User> _usersCollection;
 
         public AuthController(IMongoDatabase database)
         {
             // Users kolleksiyasina qosuluruq
-            _usersCollection = database.GetCollection<BsonDocument>("Users");
+            _usersCollection = database.GetCollection<User>("Users");
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] JsonElement payload)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            // TEHLUKELI: Gelen JSON melumatini birbasa xam metne ceviririk
-            var jsonString = payload.GetRawText();
-
-            // Zeiflik buradadir: Xam metni hec bir tip yoxlamasi etmeden birbasa MongoDB sorgusuna (BsonDocument) ceviririk
-            var queryDocument = BsonDocument.Parse(jsonString);
-
-            // Sorgunu kor-korane icra edirik
-            var user = await _usersCollection.Find(queryDocument).FirstOrDefaultAsync();
-
-            if (user != null)
+            // 1. Modelin düzgünlüyünü yoxlayırıq (String olub-olmaması artıq DTO tərəfindən təmin edilir)
+            if (!ModelState.IsValid)
             {
-                // Eger user tapildisa (ve ya injection isledikce), giris ugurlu olur
-                return Ok(new
+                return BadRequest(ModelState);
+            }
+
+            // 2. Təhlükəsiz sorğu (Query) yaradılması
+            // Builders istifadə etdikdə, MongoDB sürücüsü daxil olan dəyərləri operator ("$ne") kimi yox, 
+            // YALNIZ saf mətn (value) kimi qəbul edir.
+            var filter = Builders<User>.Filter.And(
+                Builders<User>.Filter.Eq(u => u.Username, request.Username),
+                Builders<User>.Filter.Eq(u => u.Password, request.Password)
+            );
+
+            // 3. İstifadəçinin axtarılması
+            var user = await _usersCollection.Find(filter).FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return Unauthorized(new
                 {
-                    message = "Login ugurlu!",
-                    redirect = "/dashboard"
+                    message = "Istifadeci adi ve ya parol sehvdir."
                 });
             }
 
-            return Unauthorized(new
-            {
-                message = "Istifadeci adi ve ya parol sehvdir."
-            });
+            return Ok(new { message = "Login successful!", redirect = "/dashboard" });
+
+
         }
     }
 }

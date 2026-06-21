@@ -8,8 +8,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "payload",
-        "Type": "System.Text.Json.JsonElement",
+        "Name": "request",
+        "Type": "NoSQLinjection.Models.LoginRequest",
         "IsRequired": true
       }
     ],

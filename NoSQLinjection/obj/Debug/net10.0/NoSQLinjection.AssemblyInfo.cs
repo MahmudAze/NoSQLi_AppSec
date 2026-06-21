@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("NoSQLinjection")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+560c0a3b75401b340a6b1ad7b93ee16e4e02a88e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ac62b245a9ea8f65a72bf3414466af85b640b3ee")]
 [assembly: System.Reflection.AssemblyProductAttribute("NoSQLinjection")]
 [assembly: System.Reflection.AssemblyTitleAttribute("NoSQLinjection")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
